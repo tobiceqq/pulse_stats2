@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse</title>
+
+    <!-- ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="login-screen" id="loginScreen">
+      <div class="login-card">
+        <img class="login-logo" src="assets/Pulse_Logo.png" alt="PULSE logo" />
+        <p class="label">Spotify statistics</p>
+        <h1>PULSE</h1>
+        <p class="login-copy">
+          Log in through Spotify to view your top artists, songs and albums.
+        </p>
+        <button class="primary-btn login-btn" id="loginBtn">
+          Login with Spotify
+        </button>
+        <p class="login-note" id="loginError"></p>
+      </div>
+    </section>
+
+    <div id="appShell" class="hidden">
+      <header class="site-header full-width">
+        <div class="header-inner">
+          <div class="brand">
+            <button class="logo-btn" id="homeBtn" aria-label="Domů">
+              <img class="brand-logo" src="assets/Pulse_Logo.png" alt="PULSE logo" />
+              <div class="brand-text">
+                <span class="brand-name">PULSE</span>
+                <span class="brand-subtitle">Spotify Statistics</span>
+              </div>
+            </button>
+          </div>
+
+          <nav class="header-actions">
+            <button class="ghost-btn" id="settingsBtn">Settings</button>
+            <button class="primary-btn" id="logoutBtn">Log out</button>
+          </nav>
+        </div>
+      </header>
+
+      <div class="page-shell">
+        <main class="main-content">
+          <section class="hero-panel">
+            <div class="user-card">
+              <img
+                class="avatar"
+                id="userAvatar"
+                src="assets/Pulse_Logo.png"
+                alt="Profilová fotka"
+              />
+              <div class="user-meta">
+                <p class="label">Spotify profile</p>
+                <h1 id="userName">Loading...</h1>
+                <p id="userEmail">Loading...</p>
+              </div>
+            </div>
+
+            <div class="range-switcher" role="tablist" aria-label="Časový interval">
+              <button class="range-btn active" data-range="short_term">4 weeks</button>
+              <button class="range-btn" data-range="medium_term">6 months</button>
+              <button class="range-btn" data-range="long_term">1 year</button>
+            </div>
+          </section>
+
+          <section class="stats-section">
+            <div class="stats-topbar">
+              <div class="category-tabs" role="tablist" aria-label="Kategorie statistik">
+                <button class="tab-btn active" data-tab="artists">Top Artists</button>
+                <button class="tab-btn" data-tab="songs">Top Songs</button>
+                <button class="tab-btn" data-tab="albums">Top Albums</button>
+              </div>
+
+              <button class="secondary-btn hidden" id="playlistBtn">Create Playlist</button>
+            </div>
+
+            <div class="section-heading">
+              <div>
+                <p class="label">Your listening stats</p>
+                <h2 id="sectionTitle">Top Artists</h2>
+              </div>
+              <p class="section-description" id="sectionDescription"></p>
+            </div>
+
+            <div class="skeleton-list hidden" id="loadingBox">
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+            </div>
+            <div class="error-box hidden" id="errorBox"></div>
+            <div class="stats-list" id="statsList"></div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="site-footer full-width">
+        <div class="footer-inner">
+          <span>© 2026 PULSE</span>
+          <div class="socials">
+            <a href="https://github.com/tobiceqq" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.instagram.com/pulse_stats" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/user/s%C5%A3%C3%B6rm%C5%B7eu?si=6f8876da2b3c462b" target="_blank"><i class="fab fa-spotify"></i></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-overlay hidden" id="settingsModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Settings</h3>
+          <button class="icon-btn" id="closeSettingsBtn" aria-label="Close">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="settings-block">
+            <p class="label">User info</p>
+            <p><strong>Nickname:</strong> <span id="settingsName">-</span></p>
+            <p><strong>Email:</strong> <span id="settingsEmail">-</span></p>
+            <p><strong>Spotify plan:</strong> <span id="settingsPlan">-</span></p>
+          </div>
+
+          <div class="settings-block">
+            <p class="label">Appearance</p>
+            <div class="theme-switch">
+              <button class="theme-btn active" data-theme="dark">Dark</button>
+              <button class="theme-btn" data-theme="light">Light</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="detailModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="detailTitle">Detail</h3>
+          <button class="icon-btn" id="closeDetailBtn" aria-label="Zavřít">×</button>
+        </div>
+        <div class="modal-body" id="detailBody"></div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
