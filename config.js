@@ -1,6 +1,6 @@
 export const SPOTIFY_CONFIG = {
   clientId: "3c18d1cad0984f689575932b7c55151e",
-  redirectUri: "http://127.0.0.1:5500/",
+  redirectUri: "https://tobiceqq.github.io/pulse_stats2/",
   scopes: [
     "user-read-private",
     "user-read-email",

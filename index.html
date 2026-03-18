@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,7 @@
     <!-- ikony -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.png" />
+    <link rel="icon" type="image/png+xml" href="assets/favicon.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -31,7 +31,7 @@
       <header class="site-header full-width">
         <div class="header-inner">
           <div class="brand">
-            <button class="logo-btn" id="homeBtn" aria-label="Domů">
+            <button class="logo-btn" id="homeBtn" aria-label="Home">
               <img class="brand-logo" src="assets/Pulse_Logo.png" alt="PULSE logo" />
               <div class="brand-text">
                 <span class="brand-name">PULSE</span>
@@ -55,7 +55,7 @@
                 class="avatar"
                 id="userAvatar"
                 src="assets/Pulse_Logo.png"
-                alt="Profilová fotka"
+                alt="Profile photo"
               />
               <div class="user-meta">
                 <p class="label">Spotify profile</p>
@@ -64,7 +64,7 @@
               </div>
             </div>
 
-            <div class="range-switcher" role="tablist" aria-label="Časový interval">
+            <div class="range-switcher" role="tablist" aria-label="Time interval">
               <button class="range-btn active" data-range="short_term">4 weeks</button>
               <button class="range-btn" data-range="medium_term">6 months</button>
               <button class="range-btn" data-range="long_term">1 year</button>
@@ -73,7 +73,7 @@
 
           <section class="stats-section">
             <div class="stats-topbar">
-              <div class="category-tabs" role="tablist" aria-label="Kategorie statistik">
+              <div class="category-tabs" role="tablist" aria-label="Statistics categories">
                 <button class="tab-btn active" data-tab="artists">Top Artists</button>
                 <button class="tab-btn" data-tab="songs">Top Songs</button>
                 <button class="tab-btn" data-tab="albums">Top Albums</button>
@@ -145,7 +145,7 @@
       <div class="modal-card">
         <div class="modal-header">
           <h3 id="detailTitle">Detail</h3>
-          <button class="icon-btn" id="closeDetailBtn" aria-label="Zavřít">×</button>
+          <button class="icon-btn" id="closeDetailBtn" aria-label="Close">×</button>
         </div>
         <div class="modal-body" id="detailBody"></div>
       </div>
