@@ -459,15 +459,24 @@ function openDetail(type, id) {
       ? artist.genres.join(", ")
       : "No genres available";
 
-  const followers =
-    typeof artist?.followers?.total === "number"
-      ? artist.followers.total.toLocaleString("cs-CZ")
-      : "Unknown";
+  const rangeText = {
+    short_term: "Last 4 weeks",
+    medium_term: "Last 6 months",
+    long_term: "Last year"
+  }[appState.activeRange] || "Selected period";
 
-  const popularity =
-    typeof artist?.popularity === "number"
-      ? artist.popularity
-      : "Unknown";
+  const topSongs = appState.cache.songs?.[appState.activeRange] || [];
+
+  const artistTopSongs = topSongs.filter((songItem) =>
+    Array.isArray(songItem.raw?.artists) &&
+    songItem.raw.artists.some((a) => a.id === item.id)
+  );
+
+  const topSongsCount = artistTopSongs.length;
+
+  const topSongsPreview = topSongsCount
+    ? artistTopSongs.slice(0, 5).map((song) => song.title).join(", ")
+    : "This artist does not appear in your current Top Songs list.";
 
   detailBody.innerHTML = `
     <div class="detail-hero">
@@ -478,18 +487,24 @@ function openDetail(type, id) {
       />
       <div class="detail-hero-copy">
         <h4>${artist?.name || "Unknown artist"}</h4>
-        <p>Popularity score: ${popularity}</p>
+        <p>#${item.rank} in your top artists • ${rangeText}</p>
       </div>
     </div>
 
     <div class="detail-meta">
-      <div class="detail-chip">Followers: ${followers}</div>
-      <div class="detail-chip">Popularity: ${popularity}</div>
+      <div class="detail-chip">Artist rank: #${item.rank}</div>
+      <div class="detail-chip">Top songs count: ${topSongsCount}</div>
+      <div class="detail-chip">Time range: ${rangeText}</div>
     </div>
 
     <div class="detail-section">
       <p class="detail-section-title">Genres</p>
       <p>${genres}</p>
+    </div>
+
+    <div class="detail-section">
+      <p class="detail-section-title">Top songs by this artist</p>
+      <p>${topSongsPreview}</p>
     </div>
 
     <div class="detail-actions">
