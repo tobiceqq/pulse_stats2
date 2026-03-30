@@ -717,7 +717,13 @@ detailModal.addEventListener("click", (event) => {
 });
 
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  appState.activeTab = "artists";
+  appState.activeRange = "short_term";
+  localStorage.setItem("pulse_active_tab", "artists");
+  localStorage.setItem("pulse_active_range", "short_term");
+  syncInitialUIState();
+  loadAndRenderCurrentTab();
+  window.scrollTo({ top: 0 });
 });
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
