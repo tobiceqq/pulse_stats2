@@ -80,7 +80,7 @@ function setTheme(theme) {
 function updateUserUI(user) {
   document.getElementById("userName").textContent = user.display_name || "Spotify User";
   document.getElementById("userEmail").textContent = user.email || "No email available";
-  document.getElementById("userAvatar").src = user.images?.[0]?.url || "assets/logo.svg";
+  document.getElementById("userAvatar").src = user.images?.[0]?.url || "assets/Pulse_Logo.png";
 
   document.getElementById("settingsName").textContent =
     user.display_name || "Spotify User";
@@ -136,52 +136,23 @@ async function fetchTopArtists(range) {
 
   const items = Array.isArray(data.items) ? data.items : [];
 
-  if (!items.length) {
-    appState.cache.artists[range] = [];
-    return [];
-  }
-
-  const ids = items.map((artist) => artist?.id).filter(Boolean);
-
-  let detailedArtistsMap = new Map();
-
-  if (ids.length) {
-    const detailsData = await spotifyFetch(
-      `/artists?ids=${ids.join(",")}`,
-      appState.token.access_token
-    );
-
-    const detailedArtists = Array.isArray(detailsData.artists)
-      ? detailsData.artists
-      : [];
-
-    detailedArtistsMap = new Map(
-      detailedArtists
-        .filter(Boolean)
-        .map((artist) => [artist.id, artist])
-    );
-  }
-
-    const normalized = items.map((artist, index) => {
-    const fullArtist = detailedArtistsMap.get(artist.id) || artist;
-
-    const followers = fullArtist?.followers?.total ?? 0;
-    const genres = Array.isArray(fullArtist?.genres) ? fullArtist.genres : [];
-    const image =
-      fullArtist?.images?.[0]?.url ||
-      artist?.images?.[0]?.url ||
-      "assets/Pulse_Logo.png";
+  const normalized = items.map((artist, index) => {
+    const followers = artist?.followers?.total ?? null;
+    const genres = Array.isArray(artist?.genres) ? artist.genres : [];
+    const image = artist?.images?.[0]?.url || "assets/Pulse_Logo.png";
 
     return {
       type: "artist",
-      id: fullArtist.id || artist.id || `artist-${index}`,
+      id: artist?.id || `artist-${index}`,
       rank: index + 1,
-      title: fullArtist.name || artist.name || "Unknown artist",
-      subtitle: `${followers.toLocaleString("cs-CZ")} followers • ${
+      title: artist?.name || "Unknown artist",
+      subtitle: `${
+        followers !== null ? followers.toLocaleString("cs-CZ") : "Unknown"
+      } followers • ${
         genres.length ? genres.slice(0, 2).join(" / ") : "No genres"
       }`,
       image,
-      raw: fullArtist
+      raw: artist || {}
     };
   });
 
@@ -446,7 +417,7 @@ function openDetail(type, id) {
       <div class="detail-hero">
         <img
           class="detail-cover"
-          src="${track.album.images?.[0]?.url || "assets/logo.svg"}"
+          src="${track.album.images?.[0]?.url || "assets/Pulse_Logo.png"}"
           alt="${track.name}"
         />
         <div class="detail-hero-copy">
@@ -481,50 +452,57 @@ function openDetail(type, id) {
       </div>
     `;
   } else if (type === "artist") {
-    const artist = item.raw || {};
-    const genres =
-      Array.isArray(artist.genres) && artist.genres.length
-        ? artist.genres.join(", ")
-        : "No genres available";
+  const artist = item.raw || {};
 
-      detailBody.innerHTML = `
-      <div class="detail-hero">
-        <img
-          class="detail-cover"
-          src="${artist.images?.[0]?.url || "assets/Pulse_Logo.png"}"
-          alt="${artist.name || "Artist"}"
-        />
+  const genres =
+    Array.isArray(artist?.genres) && artist.genres.length
+      ? artist.genres.join(", ")
+      : "No genres available";
+
+  const followers =
+    typeof artist?.followers?.total === "number"
+      ? artist.followers.total.toLocaleString("cs-CZ")
+      : "Unknown";
+
+  const popularity =
+    typeof artist?.popularity === "number"
+      ? artist.popularity
+      : "Unknown";
+
+  detailBody.innerHTML = `
+    <div class="detail-hero">
+      <img
+        class="detail-cover"
+        src="${artist?.images?.[0]?.url || "assets/Pulse_Logo.png"}"
+        alt="${artist?.name || "Artist"}"
+      />
       <div class="detail-hero-copy">
-          <h4>${artist.name || "Unknown artist"}</h4>
-          <p>Popularity score: ${artist.popularity ?? "Unknown"}</p>
-        </div>
+        <h4>${artist?.name || "Unknown artist"}</h4>
+        <p>Popularity score: ${popularity}</p>
       </div>
+    </div>
 
-      <div class="detail-meta">
-        <div class="detail-chip">
-          Followers: ${(artist.followers?.total ?? 0).toLocaleString("cs-CZ")}
-        </div>
-        <div class="detail-chip">
-          Popularity: ${artist.popularity ?? "Unknown"}
-        </div>
-      </div>
+    <div class="detail-meta">
+      <div class="detail-chip">Followers: ${followers}</div>
+      <div class="detail-chip">Popularity: ${popularity}</div>
+    </div>
 
-      <div class="detail-section">
-        <p class="detail-section-title">Genres</p>
-        <p>${genres}</p>
-      </div>
+    <div class="detail-section">
+      <p class="detail-section-title">Genres</p>
+      <p>${genres}</p>
+    </div>
 
-      <div class="detail-actions">
-        <a
-          class="detail-action-btn primary"
-          href="${artist.external_urls?.spotify || "#"}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open in Spotify
-        </a>
-      </div>
-    `;
+    <div class="detail-actions">
+      <a
+        class="detail-action-btn primary"
+        href="${artist?.external_urls?.spotify || "#"}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open in Spotify
+      </a>
+    </div>
+  `;
   } else {
     const album = item.raw.album;
     const artistNames = Array.isArray(album.artists)
@@ -539,7 +517,7 @@ function openDetail(type, id) {
       <div class="detail-hero">
         <img
           class="detail-cover"
-          src="${album.images?.[0]?.url || "assets/logo.svg"}"
+          src="${album.images?.[0]?.url || "assets/Pulse_Logo.png"}"
           alt="${album.name}"
         />
         <div class="detail-hero-copy">
